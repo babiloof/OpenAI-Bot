@@ -11,8 +11,8 @@ module.exports = {
 		const { client } = interaction;
 		//get the voice channel ids
 		const voiceChannelId = config.musicChannelId;
-		console.log(voiceChannelId);
-		console.log(client);
+		//console.log(voiceChannelId);
+		//console.log(client);
 		const voiceChannel = client.channels.cache.get(voiceChannelId);
 		const guildId = config.guildId;
 
