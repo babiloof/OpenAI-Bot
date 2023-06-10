@@ -68,9 +68,6 @@ client.on(Events.VoiceStateUpdate, (oldState, newState) => {
 	} else if (oldUserChannel && newUserChannel && oldUserChannel.id != newUserChannel.id){
 		logchannel[oldUserChannel.guild.id].send(`${newState.member.displayName} left ${oldUserChannel} and joined ${newUserChannel}`)
 	}
-
-    console.log(oldUserChannel);
-    console.log(newUserChannel);
 });
 
 // Log in to Discord with your client's token
