@@ -1,52 +1,56 @@
 const { SlashCommandBuilder } = require('discord.js');
 const { AudioPlayerStatus, joinVoiceChannel, createAudioPlayer, createAudioResource  } = require('@discordjs/voice');
-const config = require('../../config.json');
+const { voiceclipsdir } = require('../../config.json');
+
+var path = require('path');
+const voiceclip = path.parse(path.basename(__filename)).name;
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('dispelkenp')
-		.setDescription('Playes voiceclip dispelkenp!'),
+		.setName(voiceclip)
+		.setDescription(`Plays voiceclip ${voiceclip}!`),
 	async execute(interaction) {
-		// temporary, fix this...
-		const { client } = interaction;
-		//get the voice channel ids
-		const voiceChannelId = config.musicChannelId;
-		//console.log(voiceChannelId);
-		//console.log(client);
-		const voiceChannel = client.channels.cache.get(voiceChannelId);
-		const guildId = config.guildId;
+		if (!interaction.member.voice.channel) {
+			return interaction.reply({ content: 'You are not in a voice channel!', ephemeral: true });
+		}
 
 		//create audio player
 		const player = createAudioPlayer();
 
 		player.on(AudioPlayerStatus.Playing, () => {
-			console.log('The audio player has started playing!');
+			console.log(`Playing voiceclip ${voiceclip}!`);
 		});
 
 		player.on('error', error => {
 			console.error(`Error: ${error.message} with resource`);
 		});
 
+		player.on(AudioPlayerStatus.Idle, () => {
+			setTimeout(() => {
+				connection.disconnect();
+			}, 1000);
+		});
+
 		//create and play audio
-		const resource = createAudioResource('C:\\node\\OpenAI Bot v2\\voiceclips\\dispelkenp.mp3');
+		const resource = createAudioResource(`${voiceclipsdir}${voiceclip}.mp3`);
 		player.play(resource);
 
 		//create the connection to the voice channel
 		const connection = joinVoiceChannel({
-			channelId: voiceChannelId,
-			guildId: guildId,
-			adapterCreator: voiceChannel.guild.voiceAdapterCreator,
-		});	
+			channelId: interaction.member.voice.channel.id,
+			guildId: interaction.guildId,
+			adapterCreator: interaction.guild.voiceAdapterCreator
+		});
 
-		interaction.reply("created voice connection")
+		interaction.reply({ content:`Played voiceclip ${voiceclip}!`, ephemeral: true })
 
 		// Subscribe the connection to the audio player (will play audio on the voice connection)
 		const subscription = connection.subscribe(player);
 
 		// subscription could be undefined if the connection is destroyed!
-		if (subscription) {
+		//if (subscription) {
 			// Unsubscribe after 5 seconds (stop playing audio on the voice connection)
-			setTimeout(() => subscription.unsubscribe(), 5_000);
-		}
+		//	setTimeout(() => subscription.unsubscribe(), 5_000);
+		//}
 	},
 };
