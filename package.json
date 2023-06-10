@@ -1,0 +1,23 @@
+{
+  "name": "openai-bot",
+  "version": "1.0.0",
+  "description": "Discord bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/babiloof/OpenAI-Bot.git"
+  },
+  "author": "babiloof",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/babiloof/OpenAI-Bot/issues"
+  },
+  "homepage": "https://github.com/babiloof/OpenAI-Bot#readme",
+  "dependencies": {
+    "discord.js": "^14.11.0",
+    "dotenv": "^16.1.4"
+  }
+}
