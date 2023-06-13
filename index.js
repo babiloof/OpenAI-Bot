@@ -1,7 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
-const { token } = require('./config.json');
+const { token, clientId } = require('./config.json');
 
 //channels...
 var logchannel = {};
@@ -57,6 +57,7 @@ client.on(Events.InteractionCreate, async interaction => {
 });
 
 client.on(Events.VoiceStateUpdate, (oldState, newState) => {
+	if(oldState.id == clientId || newState.id == clientId) return;
     let newUserChannel = newState.channel;
 	let oldUserChannel = oldState.channel;
 
